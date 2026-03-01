@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Leap Year Checker</title>
+
+<style>
+:root {
+    --bg: linear-gradient(135deg, white);
+    --card-bg: white;
+    --text: #333;
+    --btn: #667eea;
+}
+
+body.dark {
+    --bg: #1e1e2f;
+    --card-bg: #2c2c3c;
+    --text: #ffffff;
+    --btn: #9f7aea;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    transition: 0.3s;
+    padding: 20px;
+}
+
+.card {
+    background: var(--card-bg);
+    color: var(--text);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+    width: 100%;
+    max-width: 350px;
+    transition: 0.3s;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+input {
+    width: 85%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+button {
+    width: 85%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--btn);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.result {
+    margin-top: 15px;
+    font-weight: bold;
+    min-height: 24px;
+}
+
+.success {
+    color: #2ecc71;
+}
+
+.error {
+    color: #e74c3c;
+}
+
+.toggle {
+    margin-top: 15px;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+@media (max-width: 400px) {
+    .card {
+        padding: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Leap Year Checker</h2>
+
+    <form id="leapForm">
+        <input type="number" id="yearInput" placeholder="Enter a year" required>
+        <button type="submit">Check</button>
+    </form>
+
+    <div id="result" class="result"></div>
+    <div class="toggle" id="modeToggle">🌙 Dark Mode</div>
+</div>
+
+<script>
+const input = document.getElementById("yearInput");
+const resultDiv = document.getElementById("result");
+const toggle = document.getElementById("modeToggle");
+const form = document.getElementById("leapForm");
+
+/* ---------- DARK MODE REGISTRATION CHECK ---------- */
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+    toggle.textContent = "☀ Light Mode"; // set text at startup
+} else {
+    toggle.textContent = "🌙 Dark Mode";
+}
+
+/* ---------- LEAP YEAR FUNCTION ---------- */
+function checkLeapYear() {
+    const year = Number(input.value);
+    resultDiv.classList.remove("success", "error");
+
+    if (!Number.isInteger(year) || year <= 0) {
+        resultDiv.textContent = "Please enter a valid positive year.";
+        resultDiv.classList.add("error");
+        return;
+    }
+
+    const isLeap = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+
+    if (isLeap) {
+        resultDiv.textContent = year + " is a Leap Year 🎉";
+        resultDiv.classList.add("success");
+    } else {
+        resultDiv.textContent = year + " is NOT a Leap Year";
+        resultDiv.classList.add("error");
+    }
+}
+
+/* ---------- FORM SUBMIT ---------- */
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    checkLeapYear();
+});
+
+/* ---------- DARK MODE TOGGLE ---------- */
+toggle.addEventListener("click", function() {
+    document.body.classList.toggle("dark");
+
+    if (document.body.classList.contains("dark")) {
+        localStorage.setItem("theme", "dark");
+        toggle.textContent = "☀ Light Mode"; // change text
+    } else {
+        localStorage.setItem("theme", "light");
+        toggle.textContent = "🌙 Dark Mode"; // change text
+    }
+});
+</script>
+
+</body>
+</html>
